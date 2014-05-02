@@ -1,0 +1,21 @@
+# components
+set(ROR_USE_MYGUI        "TRUE" CACHE BOOL "use MyGUI")
+set(ROR_USE_OPENAL       "TRUE" CACHE BOOL "use OPENAL")
+set(ROR_USE_SOCKETW      "TRUE" CACHE BOOL "use SOCKETW")
+set(ROR_USE_PAGED        "TRUE" CACHE BOOL "use paged geometry")
+set(ROR_USE_CAELUM       "TRUE" CACHE BOOL "use caelum sky")
+set(ROR_USE_ANGELSCRIPT  "TRUE" CACHE BOOL "use angel script")
+set(ROR_USE_CURL         "TRUE" CACHE BOOL "use curl, required for communication with online services")
+
+add_definitions( -DUSE_MYGUI -DUSE_SOCKETW -DUSE_OPENAL -DUSE_PAGED -DUSE_CAELUM -DUSE_ANGELSCRIPT -DUSE_CURL )
+
+# some obsolete options:
+# disabled some options for now
+#set(ROR_FEAT_TIMING     "FALSE" CACHE BOOL "enable beam statistics. For core development only")
+set(ROR_BUILD_UPDATER   OFF)
+set(ROR_FEAT_TIMING     OFF)
+set(ROR_BUILD_SIM       ON)
+
+Find_Package(OpenAL REQUIRED )
+SET ( SOCKETW_INCLUDE_DIRS /usr/include/SocketW /usr/local/include/SocketW )
+

@@ -1,0 +1,11 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: OGRE-PCZ
+Description: Portal-Connected Zone Scene Manager for OGRE
+Version: 1.8.1
+Requires: OGRE = 1.8.1
+Libs: ${libdir}/OGRE/Plugin_PCZSceneManager_d.so ${libdir}/OGRE/Plugin_OctreeZone_d.so -Wl,-rpath,${libdir}/OGRE
+Cflags: -I${includedir}/OGRE/Plugins/PCZSceneManager -I${includedir}/OGRE/Plugins/OctreeZone -pthread
