@@ -7,5 +7,5 @@ Name: OGRE-RTShaderSystem
 Description: Real time shader generation component for OGRE
 Version: 1.8.1
 Requires: OGRE = 1.8.1
-Libs: -L${libdir} -lOgreRTShaderSystem_d
+Libs: -L${libdir} -lOgreRTShaderSystem
 Cflags: -I${includedir}/OGRE/RTShaderSystem -pthread

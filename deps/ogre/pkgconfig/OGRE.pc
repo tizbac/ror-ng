@@ -8,5 +8,5 @@ Name: OGRE
 Description: Object-Oriented Graphics Rendering Engine
 Version: 1.8.1
 URL: http://www.ogre3d.org
-Libs: -L${libdir} -lOgreMain_d  -lpthread
+Libs: -L${libdir} -lOgreMain  -lpthread
 Cflags: -I${includedir} -I${includedir}/OGRE -pthread

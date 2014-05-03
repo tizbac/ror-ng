@@ -18,6 +18,6 @@
 
 
 /* some helpful OIS macro */
-/* #undef OIS_USING_DIR */
+#define OIS_USING_DIR
 
 #endif //PagedGeometryConfig_h__

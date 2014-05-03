@@ -90,7 +90,7 @@ macro(add_ror_project BINNAME folder useWxWidgets)
   add_sub_dir(${BINNAME} network)
   add_sub_dir(${BINNAME} network/protocol)
   add_sub_dir(${BINNAME} network/IRC)
-  add_sub_dir(${BINNAME} sqlite)
+  #add_sub_dir(${BINNAME} sqlite)
   add_sub_dir(${BINNAME} framework)
   add_sub_dir(${BINNAME} ${folder})
   add_main_dir(${BINNAME})
@@ -119,7 +119,7 @@ macro(add_ror_project BINNAME folder useWxWidgets)
   ENDIF(WIN32)
 
   target_link_libraries(${BINNAME}
-		${Boost_LIBRARIES} OgreMain OgreTerrain OgrePaging OgreRTShaderSystem SocketW curl MyGUIEngine MyGUI.OgrePlatform CaelumS PagedGeometry ${OPENAL_LIBRARY} ${Ois_LIBRARIES} ${OS_LIBS} ${optional_libs}
+		${Boost_LIBRARIES} OgreMain OgreTerrain OgrePaging OgreRTShaderSystem SocketW curl MyGUIEngine MyGUI.OgrePlatform CaelumS PagedGeometry angelscript ${OPENAL_LIBRARY} ${Ois_LIBRARIES} ${OS_LIBS} ${optional_libs}
 		
 	)
 	SET_TARGET_PROPERTIES(${BINNAME} PROPERTIES COMPILE_FLAGS "-std=c++0x" )

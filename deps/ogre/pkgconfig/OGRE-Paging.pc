@@ -7,5 +7,5 @@ Name: OGRE-Paging
 Description: General purpose paging component for OGRE
 Version: 1.8.1
 Requires: OGRE = 1.8.1
-Libs: -L${libdir} -lOgrePaging_d
+Libs: -L${libdir} -lOgrePaging
 Cflags: -I${includedir}/OGRE/Paging -pthread
