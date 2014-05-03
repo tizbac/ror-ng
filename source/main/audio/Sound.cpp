@@ -129,8 +129,8 @@ void Sound::setLoop(bool loop)
 
 void Sound::setPitch(float pitch)
 {
-	this->pitch = pitch;
-	sound_manager->recomputeSource(source_index, REASON_PTCH, pitch, NULL);
+	this->pitch = std::min(pitch,10.0f);
+	sound_manager->recomputeSource(source_index, REASON_PTCH, this->pitch, NULL);
 }
 
 void Sound::setPosition(Ogre::Vector3 pos)
