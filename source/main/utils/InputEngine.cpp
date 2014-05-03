@@ -1874,6 +1874,12 @@ bool InputEngine::setup(String hwnd, bool capture, bool capturemouse, int _grabM
 #endif // LINUX
 		
 		pl.insert(OIS::ParamList::value_type("WINDOW", hwnd));
+
+        pl.insert(OIS::ParamList::value_type("x11_mouse_hide", "false"));
+        pl.insert(OIS::ParamList::value_type("XAutoRepeatOn", "false"));
+        pl.insert(OIS::ParamList::value_type("x11_mouse_grab", "false"));
+        pl.insert(OIS::ParamList::value_type("x11_keyboard_grab", "false"));// Do not grab keyboard and mouse on linux, it is useless and will screw up stuff like volume control and alt tab in case of game crash
+
 		if (grabMode == GRAB_ALL)
 		{
 		} else if (grabMode == GRAB_DYNAMICALLY || grabMode == GRAB_NONE)

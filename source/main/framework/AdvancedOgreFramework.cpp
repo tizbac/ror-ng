@@ -75,7 +75,7 @@ bool OgreFramework::configure(void)
 		}
 
 		m_pRoot->initialise(false);
-
+        
 		Ogre::NameValuePairList param;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -84,6 +84,7 @@ bool OgreFramework::configure(void)
 		param["parentWindowHandle"] = hwnd;
 		printf("### parentWindowHandle =  %s\n", hwnd.c_str());
 #endif
+
 		m_pRenderWnd = m_pRoot->createRenderWindow(name, 320, 240, false, &param);
 		return true;
 	}
