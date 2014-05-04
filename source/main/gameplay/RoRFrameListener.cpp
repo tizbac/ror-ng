@@ -2998,6 +2998,7 @@ bool RoRFrameListener::updateTruckMirrors(float dt)
 // Override frameStarted event to process that (don't care about frameEnded)
 bool RoRFrameListener::frameStarted(const FrameEvent& evt)
 {
+    
 	if (shutdownall) // shortcut: press ESC in credits
 	{
 		parentState->exit();

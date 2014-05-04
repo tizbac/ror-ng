@@ -126,19 +126,19 @@ fragment_program DoF_DepthOfFieldFP_GLSL glsl
         }
       }
      
-      technique GLSL
-      {
-        pass
-        {
-          vertex_program_ref DoF_DepthVP_GLSL
-          {
-          }
-
-          fragment_program_ref DoF_DepthFP_GLSL
-          {
-          }
-        }
-      }
+    //  technique GLSL
+   //   {
+   //     pass
+   //     {
+   //       vertex_program_ref DoF_DepthVP_GLSL
+   //       {
+   //       }
+//
+   //       fragment_program_ref DoF_DepthFP_GLSL
+   //       {
+   //       }
+    //    }
+    //  }
     }
 
 

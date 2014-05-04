@@ -71,7 +71,7 @@ public:
 
 	size_t getMemoryUsage();
 	void freeResources();
-
+    std::map<std::string,Ogre::MaterialPtr> mSSAOMaterialMapping;
 protected:
 
 	Ogre::ConfigFile terrainConfig;
@@ -85,7 +85,7 @@ protected:
 	int mapsizex, mapsizey, mapsizez, pageSize, terrainSize, worldSize;
 	int pageMinX, pageMaxX, pageMinZ, pageMaxZ;
 	int terrainLayers;
-
+    
 	Ogre::Vector3 terrainPos;
 
 	// terrain engine specific

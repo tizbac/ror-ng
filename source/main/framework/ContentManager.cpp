@@ -126,8 +126,8 @@ bool ContentManager::init(void)
 	loadMainResource("flags");
 	loadMainResource("icons");
 	loadMainResource("famicons");
-
-
+    loadMainResource("ssao");
+    loadMainResource("dof");
 #ifdef WIN32
 	// TODO: FIX UNDER LINUX!
 	// register particle classes

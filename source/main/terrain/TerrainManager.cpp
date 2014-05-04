@@ -43,6 +43,8 @@ along with Rigs of Rods.  If not, see <http://www.gnu.org/licenses/>.
 #include "Utils.h"
 #include "Water.h"
 
+#include "ssaomanager.h"
+
 using namespace Ogre;
 
 TerrainManager::TerrainManager() : 
@@ -166,7 +168,8 @@ void TerrainManager::loadTerrain(String filename)
 
 	// then, init the subsystems, order is important :)
 	initSubSystems();
-
+    SSAOManager * mgr = new SSAOManager();
+    mgr->loadConfiguration();
 	fixCompositorClearColor();
 
 	LOG(" ===== LOADING TERRAIN GEOMETRY " + filename);
@@ -200,7 +203,9 @@ void TerrainManager::loadTerrain(String filename)
 		PROGRESS_WINDOW(45, _L("Initializing Overview Map Subsystem"));
 		initSurveyMap();
 	}
-
+    
+    
+    
 	collisions->finishLoadingTerrain();
 	LOG(" ===== TERRAIN LOADING DONE " + filename);
 }
@@ -311,6 +316,7 @@ void TerrainManager::initSkySubSystem()
 			// no config provided, fall back to the default one
 			sky_manager->loadScript("ror_default_sky");
 		}
+		
 
 	} else
 #endif //USE_CAELUM

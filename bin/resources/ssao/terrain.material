@@ -1,0 +1,51 @@
+fragment_program terraindepth_cg_fp cg
+{
+    source terrain.cg
+    entry_point main_fp
+    profiles ps_3_0 arbfp1
+}
+
+vertex_program terraindepth_cg_vp cg
+{
+    source terrain.cg
+    entry_point main_vp
+    profiles vs_4_0 vs_2_0 vs_1_1 arbvp1
+}
+
+fragment_program terraindepth_fp unified
+{
+    delegate terraindepth_cg_fp
+}
+vertex_program terraindepth_vp unified
+{
+    delegate terraindepth_cg_vp
+}
+material terraindepth {
+     technique
+    {
+        pass
+        {
+        vertex_program_ref terraindepth_vp {
+        param_named_auto worldMatrix world_matrix
+        param_named_auto viewMatrix view_matrix
+        param_named_auto viewProjMatrix viewproj_matrix
+        param_named_auto lodMorph custom 1001
+        param_named_auto fogParams fog_params
+
+        
+        }
+       
+
+          fragment_program_ref terraindepth_fp
+          {
+          param_named_auto fogColour fog_colour
+          param_named_auto cFarDistance far_clip_distance
+          param_named_auto viewMatrix view_matrix
+
+          }
+        
+        
+        }
+        
+   }
+}

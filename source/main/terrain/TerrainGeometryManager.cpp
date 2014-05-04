@@ -22,6 +22,7 @@ along with Rigs of Rods.  If not, see <http://www.gnu.org/licenses/>.
 #include "Language.h"
 #include "LoadingWindow.h"
 #include "TerrainManager.h"
+#include <TerrainMaterialGeneratorD.h>
 
 using namespace Ogre;
 
@@ -156,13 +157,15 @@ void TerrainGeometryManager::initTerrain()
 			if(!terrain) continue;
 			terrain->load();
 			*/
+            
+            
 		}
 	}
 
 	// sync load since we want everything in place when we start
 	LoadingWindow::getSingleton().setProgress(23, _L("loading terrain pages"));
 	mTerrainGroup->loadAllTerrains(true);
-
+    TerrainMaterialGeneratorD * mgen = new TerrainMaterialGeneratorD();
 
 	// update the blend maps
 	if (mTerrainsImported)
@@ -178,6 +181,8 @@ void TerrainGeometryManager::initTerrain()
 				loadLayers(x, z, terrain);
 				LoadingWindow::getSingleton().setProgress(23, _L("loading terrain page blend maps ") + XZSTR(x,z));
 				initBlendMaps(x, z, terrain);
+               
+                
 			}
 		}
 		
@@ -191,7 +196,7 @@ void TerrainGeometryManager::initTerrain()
 	{
 		LOG(" *** Terrain loaded from cache ***");
 	}
-
+   
 	mTerrainGroup->freeTemporaryResources();
 }
 
@@ -261,7 +266,7 @@ void TerrainGeometryManager::configureTerrainDefaults()
 		matProfile->setLayerSpecularMappingEnabled(BOPT("SpecularMappingEnabled", false));
 		matProfile->setLayerParallaxMappingEnabled(BOPT("ParallaxMappingEnabled", false));
 		matProfile->setGlobalColourMapEnabled(BOPT("GlobalColourMapEnabled", false));
-		matProfile->setReceiveDynamicShadowsDepth(BOPT("ReceiveDynamicShadowsDepth", false));
+		matProfile->setReceiveDynamicShadowsDepth(BOPT("ReceiveDynamicShadowsDepth", true));
 	}
 
 	terrainOptions->setLayerBlendMapSize(IOPT("LayerBlendMapSize", 1024));
@@ -269,7 +274,7 @@ void TerrainGeometryManager::configureTerrainDefaults()
 	terrainOptions->setCompositeMapDistance(IOPT("CompositeMapDistance", 4000));
 	terrainOptions->setSkirtSize(IOPT("SkirtSize", 30));
 	terrainOptions->setLightMapSize(IOPT("LightMapSize", 1024));
-	terrainOptions->setCastsDynamicShadows(BOPT("CastsDynamicShadows", false));
+	terrainOptions->setCastsDynamicShadows(BOPT("CastsDynamicShadows", true));
 
 	terrainOptions->setUseRayBoxDistanceCalculation(false);
 

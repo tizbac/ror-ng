@@ -1,0 +1,104 @@
+
+float4 expand(float4 v)
+{ 
+   return v * 2 - 1;
+}
+
+
+void main_fp(
+float4 position : TEXCOORD0,
+ out float4 oColor0 : COLOR0,
+ out float4 oColor1 : COLOR1,
+ out float4 oColor2 : COLOR2,
+uniform float cFarDistance,
+uniform float4x4 viewMatrix,
+float4 uvMisc : TEXCOORD1,
+float4 layerUV0 : TEXCOORD2, 
+float4 layerUV1 : TEXCOORD3, 
+uniform sampler2D globalNormal : register(s0)
+, uniform sampler2D blendTex0 : register(s1)
+, uniform sampler2D difftex0 : register(s2)
+, uniform sampler2D normtex0 : register(s3)
+, uniform sampler2D difftex1 : register(s4)
+, uniform sampler2D normtex1 : register(s5)
+, uniform sampler2D difftex2 : register(s6)
+, uniform sampler2D normtex2 : register(s7)
+, uniform sampler2D difftex3 : register(s8)
+, uniform sampler2D normtex3 : register(s9)
+) 
+{
+   float2 uv = uvMisc.xy;
+   oColor0 = float4(0,0,0,0);
+   oColor1 = oColor2 = float4(1,1,1,1);
+   float3 normal = expand(tex2D(globalNormal, uv));
+  float3 diffuse = float3(0,0,0);
+   float specular = 0;
+  float4 blendTexVal0 = tex2D(blendTex0, uv);
+  float3 tangent = float3(1, 0, 0);
+  normal = mul(viewMatrix, float4(normal,0)).xyz;
+  tangent = mul(viewMatrix, float4(tangent,0)).xyz;
+  float3 binormal = cross(normal, tangent);
+  float3x3 TBN = float3x3(tangent, binormal, normal);
+  float3 TSnormal;
+  float2 uv0 = layerUV0.xy;
+  TSnormal = expand(tex2D(normtex0, uv0)).rgb;
+  oColor1.rgb = TSnormal;
+  float4 diffuseSpecTex0 = tex2D(difftex0, uv0);
+  diffuse = diffuseSpecTex0.rgb;
+  specular = diffuseSpecTex0.a;
+  float2 uv1 = layerUV0.zw;
+  TSnormal = expand(tex2D(normtex1, uv1)).rgb;
+  oColor1.rgb = lerp(oColor1.rgb, TSnormal, blendTexVal0.r);
+  float4 diffuseSpecTex1 = tex2D(difftex1, uv1);
+  diffuse = lerp(diffuse, diffuseSpecTex1.rgb, blendTexVal0.r);
+  specular = lerp(specular, diffuseSpecTex1.a, blendTexVal0.r);
+  float2 uv2 = layerUV1.xy;
+  TSnormal = expand(tex2D(normtex2, uv2)).rgb;
+  oColor1.rgb = lerp(oColor1.rgb, TSnormal, blendTexVal0.g);
+  float4 diffuseSpecTex2 = tex2D(difftex2, uv2);
+  diffuse = lerp(diffuse, diffuseSpecTex2.rgb, blendTexVal0.g);
+  specular = lerp(specular, diffuseSpecTex2.a, blendTexVal0.g);
+  float2 uv3 = layerUV1.zw;
+  TSnormal = expand(tex2D(normtex3, uv3)).rgb;
+  oColor1.rgb = lerp(oColor1.rgb, TSnormal, blendTexVal0.b);
+  float4 diffuseSpecTex3 = tex2D(difftex3, uv3);
+  diffuse = lerp(diffuse, diffuseSpecTex3.rgb, blendTexVal0.b);
+  specular = lerp(specular, diffuseSpecTex3.a, blendTexVal0.b);
+  oColor0.rgb += diffuse;
+   oColor0.a += specular;
+  oColor1 = float4(normalize(mul(oColor1.rgb, TBN)), length(position) / cFarDistance);
+}
+
+
+void main_vp(
+float2 posIndex : POSITION,
+float height  : TEXCOORD0,
+float2 delta  : TEXCOORD1,
+uniform float4x4 worldMatrix,
+uniform float4x4 viewMatrix,
+uniform float4x4 viewProjMatrix,
+uniform float2   lodMorph,
+uniform float4x4   posIndexToObjectSpace,
+uniform float    baseUVScale,
+uniform float4 uvMul_0, 
+out float4 oPos : POSITION,
+out float4 oPosObj : TEXCOORD0
+, out float4 oUVMisc : TEXCOORD1 // xy = uv, z = camDepth
+, out float4 oUV0 : TEXCOORD2
+, out float4 oUV1 : TEXCOORD3
+)
+{
+   float4 pos;
+   pos = mul(posIndexToObjectSpace, float4(posIndex, height, 1));
+   float2 uv = float2(posIndex.x * baseUVScale, 1.0 - (posIndex.y * baseUVScale));
+   float4 worldPos = mul(worldMatrix, pos);
+   oPosObj = mul(viewMatrix, pos);
+   float toMorph = -min(0, sign(delta.y - lodMorph.y));
+  worldPos.y += delta.x * toMorph * lodMorph.x;
+   oUV0.xy =  uv.xy * uvMul_0.r;
+   oUV0.zw =  uv.xy * uvMul_0.g;
+   oUV1.xy =  uv.xy * uvMul_0.b;
+   oUV1.zw =  uv.xy * uvMul_0.a;
+   oPos = mul(viewProjMatrix, worldPos);
+   oUVMisc.xy = uv.xy;
+}

@@ -35,6 +35,7 @@ SkyManager::SkyManager() : mCaelumSystem(0), lc(0)
 	// Initialise CaelumSystem.
 	mCaelumSystem = new Caelum::CaelumSystem (gEnv->ogreRoot, gEnv->sceneManager, Caelum::CaelumSystem::CAELUM_COMPONENTS_NONE);
 	mCaelumSystem->attachViewport(gEnv->viewPort);
+    mCaelumSystem->forceSubcomponentVisibilityFlags(DEPTHMAP_DISABLED);
 
 	/*
 	// TODO: set real time, and let the user select his true location
@@ -128,7 +129,7 @@ void SkyManager::loadScript(String script, int fogStart, int fogEnd)
 
 		mCaelumSystem->setEnsureSingleShadowSource(true);
 		mCaelumSystem->setEnsureSingleLightSource(true);
-
+        mCaelumSystem->forceSubcomponentVisibilityFlags(DEPTHMAP_DISABLED);
 		// enforcing update, so shadows are set correctly before creating the terrain
 		forceUpdate(0.1);
 
@@ -171,7 +172,7 @@ String SkyManager::getPrettyTime()
 
 bool SkyManager::update( float dt )
 {
-	// TODO
+    
 	return true;
 }
 

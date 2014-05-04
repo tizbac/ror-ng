@@ -39,7 +39,7 @@ void DoF_DepthFP_cg(  float4 viewPos  : TEXCOORD0,
   
   f = 0.5f*f + 0.5f;                                                            // scale and bias into [0, 1] range
   
-  color = float4(normalize(iNormal).xyz,f);
+  color = float4(normalize(iNormal).xyz,0);
 }
 
 
