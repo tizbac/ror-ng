@@ -45,7 +45,7 @@ along with Rigs of Rods.  If not, see <http://www.gnu.org/licenses/>.
 #define BEAMS_INTRA_TRUCK_PARALLEL 0
 #define NODES_INTER_TRUCK_PARALLEL 1
 #define NODES_INTRA_TRUCK_PARALLEL 1
-
+#define MAXFORCECOEFF 25000.0f
 using namespace Ogre;
 
 void Beam::calcForcesEulerCompute(int doUpdate, Real dt, int step, int maxsteps)
@@ -1792,9 +1792,12 @@ void Beam::calcBeams(int doUpdate, Ogre::Real dt, int step, int maxsteps, int ch
 					{
 						increased_accuracy = true;
 						Real yield_length = beams[i].maxposstress / k;
+                        
 						Real deform = difftoBeamL + yield_length * (1.0f - beams[i].plastic_coef);
+                        
 						Real Lold = beams[i].L;
 						beams[i].L += deform;
+                        beams[i].L = std::min(beams[i].refL*3.0f,beams[i].L);
 						beams[i].L = std::max(MIN_BEAM_LENGTH, beams[i].L);
 						slen = slen - (slen - beams[i].maxposstress) * 0.5f;
 						len = slen;
@@ -1812,6 +1815,7 @@ void Beam::calcBeams(int doUpdate, Ogre::Real dt, int step, int maxsteps, int ch
 						Real deform = difftoBeamL + yield_length * (1.0f - beams[i].plastic_coef);
 						Real Lold = beams[i].L;
 						beams[i].L += deform;
+                        beams[i].L = std::min(beams[i].refL*3.0f,beams[i].L);
 						slen = slen - (slen - beams[i].maxnegstress) * 0.5f;
 						len = -slen;
 						if (Lold > 0.0f && beams[i].L > Lold)
@@ -2040,6 +2044,62 @@ void Beam::calcNodes(int doUpdate, Ogre::Real dt, int step, int maxsteps, int ch
 		// integration
 		if (!nodes[i].locked)
 		{
+            if ( nodes[i].Forces.x > MAXFORCECOEFF*nodes[i].mass )
+            {
+                float newx = MAXFORCECOEFF*nodes[i].mass;
+                
+                float change = newx/nodes[i].Forces.x;
+                nodes[i].Forces.x = newx;
+                nodes[i].Forces.y *= change;
+                nodes[i].Forces.z *= change;
+            }
+            if ( nodes[i].Forces.y > MAXFORCECOEFF*nodes[i].mass )
+            {
+                float newy = MAXFORCECOEFF*nodes[i].mass;
+                
+                float change = newy/nodes[i].Forces.y;
+                nodes[i].Forces.y = newy;
+                nodes[i].Forces.x *= change;
+                nodes[i].Forces.z *= change;
+            }
+            if ( nodes[i].Forces.z > MAXFORCECOEFF*nodes[i].mass )
+            {
+                float newz = MAXFORCECOEFF*nodes[i].mass;
+                
+                float change = newz/nodes[i].Forces.z;
+                nodes[i].Forces.z = newz;
+                nodes[i].Forces.y *= change;
+                nodes[i].Forces.x *= change;
+            }
+            
+            if ( nodes[i].Forces.x < -MAXFORCECOEFF*nodes[i].mass )
+            {
+                float newx = -MAXFORCECOEFF*nodes[i].mass;
+                
+                float change = newx/nodes[i].Forces.x;
+                nodes[i].Forces.x = newx;
+                nodes[i].Forces.y *= change;
+                nodes[i].Forces.z *= change;
+            }
+            if ( nodes[i].Forces.y < -MAXFORCECOEFF*nodes[i].mass )
+            {
+                float newy = -MAXFORCECOEFF*nodes[i].mass;
+                
+                float change = newy/nodes[i].Forces.y;
+                nodes[i].Forces.y = newy;
+                nodes[i].Forces.x *= change;
+                nodes[i].Forces.z *= change;
+            }
+            if ( nodes[i].Forces.z < -MAXFORCECOEFF*nodes[i].mass )
+            {
+                float newz = -MAXFORCECOEFF*nodes[i].mass;
+                
+                float change = newz/nodes[i].Forces.z;
+                nodes[i].Forces.z = newz;
+                nodes[i].Forces.y *= change;
+                nodes[i].Forces.x *= change;
+            }
+            
 			nodes[i].Velocity += nodes[i].Forces * nodes[i].inverted_mass * dt;
 			nodes[i].RelPosition += nodes[i].Velocity * dt;
 			nodes[i].AbsPosition = origin;
